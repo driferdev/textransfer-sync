@@ -1,0 +1,28 @@
+version: "3.7"
+services:
+    sync-service:
+        container_name: textransfer_sync
+        image: "node:10-alpine"
+        user: "node"
+        working_dir: /home/node/app
+        environment:
+            - NODE_ENV=dev
+        volumes:
+            - ./:/home/node/app
+        command: "npm run start"
+        ports:
+            - "8010:8000"
+        networks:
+            default:
+                aliases:
+                    - local-sync-service.textransfer.tech
+            textransfer:
+                aliases:
+                    - local-sync-service.textransfer.tech
+networks:
+    default:
+        ipam:
+            config:
+                - subnet: 11.0.2.0/24
+    textransfer:
+        external: true
